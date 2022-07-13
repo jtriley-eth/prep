@@ -3,6 +3,9 @@
 ```yul
 object "Depositooor" {
     code {
+        // -----------------------------------------------------------------------------------------
+        // Constructor
+
         // Store the creator in slot zero.
         sstore(0, caller())
 
@@ -12,6 +15,9 @@ object "Depositooor" {
     }
     object "runtime" {
         code {
+            // -------------------------------------------------------------------------------------
+            // Dispatch
+
             switch shr(0xe0, calldataload(0x00))
             case 0xd0e30db0 {
                 let storage_ptr := deposit_ptr(caller())
@@ -36,6 +42,7 @@ object "Depositooor" {
                 revert(0x00, 0x00)
             }
 
+            // -------------------------------------------------------------------------------------
             // Storage
             function deposit_ptr(account) -> offset {
                 mstore(0x00, account)
@@ -43,6 +50,8 @@ object "Depositooor" {
                 offset := keccak256(0x00, 0x40)
             }
 
+            // -------------------------------------------------------------------------------------
+            // Events
             function log_deposit(account, amount) {
                 let hash := 0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c
                 mstore(0, amount)
